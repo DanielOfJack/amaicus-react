@@ -22,7 +22,7 @@ const DocumentViewer = () => {
   useEffect(() => {
     const fetchDocument = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/documents/${docId}`);
+        const response = await fetch(`https://amaicus-production.up.railway.app/documents/${docId}`);
         if (response.ok) {
           const data = await response.json();
           setHtmlContent(data.html_content);
