@@ -8,7 +8,6 @@ const cities = ["Cape Town", "Johannesburg", "Cape Agulhas", "Matzikama", "eThek
 
 const Sidebar = ({ onLocationChange, onYearRangeChange }) => {
   const [selectedDocuments] = useState(["By-law"]);
-  const [selectedCountries] = useState(["South Africa"]); 
   const [selectedLocalities, setSelectedLocalities] = useState([]);
   const [yearRange, setYearRange] = useState([1900, 2024]);
 
