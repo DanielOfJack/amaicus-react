@@ -64,7 +64,7 @@ const formatComponentTitle = (component) => {
   return titleParts.join(' | ');
 };
 
-const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, date, searchResults, docId }) => {
+const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, date, expression_date, searchResults, docId }) => {
   const [activePopupIndex, setActivePopupIndex] = useState(null);
   const [popupPosition, setPopupPosition] = useState({ top: 0 });
 
@@ -113,7 +113,7 @@ const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, d
         <img src={flagUrl} alt={`Flag of ${fullCountryName}`} className="flag-icon" />
         <Typography className="country-name">{`${locationName}, ${fullCountryName}`}</Typography>
         <Typography className="document-type">{formatSubtype(documentType)}</Typography>
-        <Typography className="document-date">{date}</Typography>
+        <Typography className="document-date">{expression_date}</Typography>
       </Box>
 
       <Divider className="divider" />

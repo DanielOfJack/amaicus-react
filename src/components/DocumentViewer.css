@@ -12,8 +12,7 @@
   height: calc(2.5vh); /* Adjust height so it starts under navbar */
   padding-left: 25px;
   font-size: 18px;
-  font-weight: bold;
-  border-bottom: 2px solid #8d8989;
+  border-bottom: 2px solid #898d89;
   width: calc(23vw); /* Same width as the TOC */
   position: fixed;
   top: 8vh;
@@ -47,8 +46,8 @@
 }
 
 .toc-item:hover {
-  background-color: #f0f0f0;
-  color: #0056b3;
+  background-color: #f7f6f6;
+  color: rgb(23, 165, 25);
 }
 
 .toc-children {
@@ -88,7 +87,7 @@
   border: none;
   cursor: pointer;
   font-size: 16px;
-  color: #007bff;
+  color: rgb(23, 165, 25);
   margin-right: 10px; /* Place button before the item text */
 }
 

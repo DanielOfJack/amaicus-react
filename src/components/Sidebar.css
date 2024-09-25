@@ -1,61 +1,104 @@
-/* Sidebar.css */
 .sidebar-container {
-    width: 300px;
-    background-color: white;
-    border-radius: 20px;  
-    margin-left: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    position: fixed;
-    top: 14%; /* Sidebar starts at 10% down */
-    bottom: 1%;
-    left: 0;
-    overflow-y: auto;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid black; /* Thin black outline */
-    background-color: rgb(250, 250, 250);
-  }
-  
-/* Sidebar.css */
+  width: 320px;
+  background-color: white;
+  border-radius: 20px;  
+  margin-left: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;  /* Reduced padding */
+  padding-top: 100px;
+  position: fixed;
+  top: 14%; 
+  bottom: 1%;
+  left: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid black;
+  background-color: rgb(250, 250, 250);
+  z-index: 0;
+}
+
 .button-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px; /* Adds horizontal and vertical space between buttons */
-    margin-bottom: 15px;
-  }
-  
-  .custom-button {
-    background-color: white !important;
-    color: black !important;
-    border: 1px solid black;
-    padding: 10px 20px; /* Adds some padding inside the buttons */
-  }
-  
-  .custom-button.active {
-    background-color: black !important;
-    color: white !important;
-  }
-  
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Reduced gap between buttons */
+  margin-bottom: 10px; /* Reduced bottom margin */
+}
 
-  .custom-chip {
-    background-color: black !important; /* Force black background for chips */
-    color: white !important; /* White text */
-  }
+.custom-button {
+  background-color: rgb(214, 214, 214) !important;
+  color: black !important;
+  border: 1px solid black;
+  padding: 5px 10px; /* Reduced padding inside buttons */
+}
 
-  /* Sidebar.css */
+.custom-button.active {
+  background-color: black !important;
+  color: white !important;
+}
+
+.jurisdiction-chip {
+  background-color: black !important;
+  color: white !important;
+}
+
+.jurisdiction-chip .MuiChip-deleteIcon {
+  color: white !important; /* White cross */
+}
+
+/* Ensure that the tooltip displays for South Africa */
+.MuiChip-root:hover {
+  cursor: default;
+}
+
+.MuiChip-root.Mui-disabled {
+  background-color: black !important;
+  color: white !important;
+  opacity: 1 !important; /* Ensure opacity doesn't affect the chip */
+}
+
 .scrollable-list {
-    max-height: 150px; /* Control the height of the list */
-    overflow-y: auto; /* Ensure vertical scrollability */
-    padding: 5px;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.sidebar-divider {
+  margin: 5px 0; /* Reduced margin for dividers */
+}
+
+.slider-range {
+  margin-top: 5px;
+}
+
+.custom-slider {
+  left: 15px;
 }
 
 .custom-checkbox {
-    color: black !important; /* Force the checkbox to stay black */
+  color: black !important;
+  padding: 5px; /* Reduced checkbox padding */
 }
 
 .custom-checkbox.Mui-checked {
     color: black !important; /* Ensure checked color is black */
+}
+
+.sidebar-wrapper {
+  width: 16vw;
+  height: 18vh;
+  position: fixed;
+  top: 3.5vh;
+  left: 30px;
+  padding-top: 0px;
+  z-index: 1;
+}
+
+.sidebar-logo {
+  position: absolute; /* Make the logo absolutely positioned */
+  width: 110%; /* Adjust width as needed */
+  height: 110%;
+  z-index: 10;
 }

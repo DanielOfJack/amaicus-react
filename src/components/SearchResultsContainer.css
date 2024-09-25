@@ -4,9 +4,9 @@
     top: 10%; /* Start 20% down the screen */
     margin-top: 20px; /* Optional padding for spacing */
     height: calc(100vh - 20%); /* Height minus space taken by the search bar and the 20% top padding */
-    width: 65%;
+    width: 60%;
     box-sizing: border-box;
-    margin-left: 20px;
+    margin-left: 60px;
 }
 
 /* Styling for the "No search results found" message */

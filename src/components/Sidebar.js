@@ -1,64 +1,71 @@
-// src/components/Sidebar.js
 import React, { useState } from 'react';
-import { Box, Typography, Divider, Button, TextField, Autocomplete, Slider, Chip, List, ListItem, ListItemText, Checkbox } from '@mui/material';
+import { Box, Button, Typography, Divider, Slider, Chip, List, ListItem, ListItemText, Checkbox, Autocomplete, TextField, Tooltip } from '@mui/material';
 import './Sidebar.css';
 
-// Available labels for "Document" section
-const documentLabels = ["By-law", "Act", "Gazette", "Notice", "Judgement", "Ammendment"];
+const documentLabels = ["By-law", "Act", "Gazette", "Notice", "Judgement"];
+const africanCountries = ["South Africa", "Nigeria", "Kenya", "Ghana", "Egypt"];
+const cities = ["Cape Town", "Johannesburg", "Cape Agulhas", "Matzikama", "eThekwini", "Mbizana"];
 
-const africanCountries = ["Nigeria", "Kenya", "South Africa", "Ghana", "Egypt", "Ethiopia", "Morocco", "Uganda"];
-
-const cities = ["Lagos", "Nairobi", "Johannesburg", "Accra", "Cairo", "Addis Ababa", "Casablanca", "Kampala"];
-
-const Sidebar = () => {
-  const [selectedDocuments, setSelectedDocuments] = useState([]);
-  const [selectedCountries, setSelectedCountries] = useState([]);
+const Sidebar = ({ onLocationChange, onYearRangeChange }) => {
+  const [selectedDocuments] = useState(["By-law"]);
+  const [selectedCountries] = useState(["South Africa"]); 
   const [selectedLocalities, setSelectedLocalities] = useState([]);
   const [yearRange, setYearRange] = useState([1900, 2024]);
 
-  const toggleDocument = (label) => {
-    setSelectedDocuments((prev) =>
-      prev.includes(label) ? prev.filter((item) => item !== label) : [...prev, label]
-    );
-  };
-
-  const addCountry = (event, newValue) => {
-    if (newValue && !selectedCountries.includes(newValue)) {
-      setSelectedCountries([...selectedCountries, newValue]);
-    }
-  };
-  
-  const removeCountry = (country) => {
-    setSelectedCountries(selectedCountries.filter((c) => c !== country));
+  const toggleLocality = (city) => {
+    const updatedLocalities = selectedLocalities.includes(city)
+      ? selectedLocalities.filter((item) => item !== city)
+      : [...selectedLocalities, city];
+    setSelectedLocalities(updatedLocalities);
+    onLocationChange(updatedLocalities);
   };
 
   const handleYearRangeChange = (event, newValue) => {
     setYearRange(newValue);
-  };
-
-  const toggleLocality = (city) => {
-    setSelectedLocalities((prev) =>
-      prev.includes(city) ? prev.filter((item) => item !== city) : [...prev, city]
-    );
+    onYearRangeChange(newValue); // Send the updated range to the parent
   };
 
   return (
     <Box className="sidebar-container">
-      <Typography variant="h5" className="sidebar-title">Filters</Typography>
-
       {/* Document Section */}
       <Typography variant="h6" className="sidebar-section-title">Document</Typography>
       <Box className="button-group">
         {documentLabels.map((label) => (
-          <Button
+          <Tooltip
             key={label}
-            variant={selectedDocuments.includes(label) ? "contained" : "outlined"}
-            color={selectedDocuments.includes(label) ? "primary" : "default"}
-            onClick={() => toggleDocument(label)}
-            className={`custom-button ${selectedDocuments.includes(label) ? "active" : ""}`}
+            title="Documents have been restricted to only 'By laws' for the amAIcus Africa prototype. Full API access coming soon."
+            placement="right"
+            arrow // Add arrow to Document tooltip
+            PopperProps={{
+              modifiers: [
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [0, 10], // Adjusts tooltip positioning slightly
+                  },
+                },
+              ],
+            }}
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  fontSize: '1rem', // Increase tooltip text size
+                  backgroundColor: '#gray', // Optional: customize tooltip background color
+                  color: 'white', // Optional: customize tooltip text color
+                },
+              },
+            }}
           >
-            {label}
-          </Button>
+            <Button
+              key={label}
+              variant={selectedDocuments.includes(label) ? "contained" : "outlined"}
+              color={selectedDocuments.includes(label) ? "primary" : "default"}
+              disabled={label !== "By-law"}
+              className={`custom-button ${selectedDocuments.includes(label) ? "active" : ""}`}
+            >
+              {label}
+            </Button>
+          </Tooltip>
         ))}
       </Box>
       <Divider className="sidebar-divider" />
@@ -67,25 +74,64 @@ const Sidebar = () => {
       <Typography variant="h6" className="sidebar-section-title">Jurisdiction</Typography>
       <Autocomplete
         options={africanCountries}
-        onChange={addCountry}
+        value="South Africa"
+        getOptionDisabled={(option) => option !== "South Africa"}
         renderInput={(params) => (
-          <TextField 
-            {...params} 
-            variant="outlined"  /* Ensure label is tied correctly with outlined variant */
+          <TextField
+            {...params}
+            variant="outlined"
             sx={{ backgroundColor: 'white', borderRadius: '20px' }}
           />
         )}
         className="sidebar-autocomplete"
       />
       <Box className="chip-group">
-        {selectedCountries.map((country) => (
-          <Chip
-            key={country}
-            label={country}
-            onDelete={() => removeCountry(country)}
-            className="custom-chip"
-          />
-        ))}
+        {/* Preselect 'South Africa' */}
+        <Tooltip 
+          title="Jurisdiction has been limited to South Africa for the amAIcus Africa prototype. Full API access coming soon." 
+          placement="right" 
+          arrow
+          PopperProps={{
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, 10],
+                },
+              },
+            ],
+          }}
+          componentsProps={{
+            tooltip: {
+              sx: {
+                fontSize: '1rem', // Increase tooltip text size
+                backgroundColor: '#gray', // Optional: customize tooltip background color
+                color: 'white', // Optional: customize tooltip text color
+              },
+            },
+          }}
+        >
+          <span>
+            <Chip
+              label="South Africa"
+              sx={{
+                backgroundColor: 'black !important',
+                color: 'white !important',
+                '& .MuiChip-deleteIcon': {
+                  color: 'white !important',
+                },
+                '&.Mui-disabled': {
+                  opacity: 1,
+                  backgroundColor: 'black !important',
+                  color: 'white !important',
+                },
+              }}
+              onDelete={() => {}}
+              deleteIcon={<span>✕</span>}
+              disabled
+            />
+          </span>
+        </Tooltip>
       </Box>
       <Divider className="sidebar-divider" />
 
@@ -109,14 +155,16 @@ const Sidebar = () => {
 
       {/* Year Section */}
       <Typography variant="h6" className="sidebar-section-title">Year</Typography>
-      <Slider
-        value={yearRange}
-        onChange={handleYearRangeChange}
-        valueLabelDisplay="auto"
-        min={1900}
-        max={2024}
-        className="custom-slider"
-      />
+      <Box sx={{ width: '90%' }}> {/* Adjust width as needed */}
+        <Slider
+          value={yearRange}
+          onChange={handleYearRangeChange}
+          valueLabelDisplay="auto"
+          min={1900}
+          max={2024}
+          className="custom-slider"
+        />
+      </Box>
       <Typography variant="body2" className="slider-range">
         Range: {yearRange[0]} - {yearRange[1]}
       </Typography>

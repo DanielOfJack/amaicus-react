@@ -8,10 +8,9 @@
     justify-content: flex-start;
     padding-left: 10px; /* Padding from sidebar */
     margin-top: 2%; /* Keep it 10% down the page */
-    width: 55%;
-    margin-right: 40px; /* Add padding to the right edge */
+    width: 58.5%;
     position: fixed;
-    margin-left:40px;
+    margin-left:80px;
     z-index: 10; /* Make sure it stays on top */
     border-radius: 20px;
     padding: 15px;

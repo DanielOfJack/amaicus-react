@@ -3,15 +3,15 @@ import { Box, TextField, InputAdornment, Select, MenuItem, FormControl, InputLab
 import SearchIcon from '@mui/icons-material/Search';
 import './SearchBar.css';
 
-const SearchBar = ({ onSearchResults }) => {
+const SearchBar = ({ onSearchResults, setLoading, loading, sortBy, setSortBy }) => {
   const [searchQuery, setSearchQuery] = useState(""); // State for the search input
-  const [sortBy, setSortBy] = useState("Similarity Score");
 
   const handleSortChange = (event) => {
-    setSortBy(event.target.value);
+    setSortBy(event.target.value);  // Update the sortBy value in the parent (MainContent)
   };
 
   const handleSearch = async () => {
+    setLoading(true); // Set loading to true when the search starts
     try {
       const response = await fetch('https://amaicus-production.up.railway.app/search', {
         method: 'POST',
@@ -33,6 +33,8 @@ const SearchBar = ({ onSearchResults }) => {
 
     } catch (error) {
       console.error("Error fetching search results:", error);
+    } finally {
+      setLoading(false); // Set loading to false when the search completes
     }
   };
 
@@ -58,20 +60,29 @@ const SearchBar = ({ onSearchResults }) => {
             borderRadius: "20px",  // Rounded corners for the search bar
           },
         }}
+        disabled={loading} // Disable the input while loading
       />
 
       {/* Sort By Dropdown */}
       <FormControl variant="outlined" className="sort-by-container">
-        <InputLabel shrink>Sort By</InputLabel>
+        <InputLabel
+          shrink
+          sx={{
+            color: 'black !important',  // Ensures the label stays black even when not selected
+          }}
+        >
+          Sort By
+        </InputLabel>
         <Select
-          value={sortBy}
-          onChange={handleSortChange}
+          value={sortBy}  // Use the sortBy state passed from MainContent
+          onChange={handleSortChange}  // Call the handler to update sortBy
           input={<OutlinedInput label="Sort By" />}
           className="sort-dropdown"
           sx={{
-            backgroundColor: "white",
-            borderRadius: "20px",  // Rounded corners for the dropdown
+            backgroundColor: 'white',
+            borderRadius: '20px',  // Rounded corners for the dropdown
           }}
+          disabled={loading}  // Disable the dropdown while loading
         >
           <MenuItem value="Similarity Score">Similarity Score</MenuItem>
           <MenuItem value="Date (oldest first)">Date (oldest first)</MenuItem>
@@ -85,6 +96,7 @@ const SearchBar = ({ onSearchResults }) => {
         color="primary"
         onClick={handleSearch}  // Trigger search on button click
         sx={{ marginLeft: '10px', borderRadius: '20px' }}
+        disabled={loading} // Disable the button while loading
       >
         Search
       </Button>
