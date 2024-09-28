@@ -7,10 +7,10 @@
     align-items: center;
     justify-content: flex-start;
     padding-left: 10px; /* Padding from sidebar */
-    margin-top: 2%; /* Keep it 10% down the page */
-    width: 58.5%;
+    margin-top: 2vh; /* Keep it 10% down the page */
+    width: 58.5vw;
     position: fixed;
-    margin-left:80px;
+    margin-left:4vw;
     z-index: 10; /* Make sure it stays on top */
     border-radius: 20px;
     padding: 15px;

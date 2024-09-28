@@ -1,12 +1,12 @@
 /* The container holding the search results */
 .search-results-container {
-    position: absolute;
-    top: 10%; /* Start 20% down the screen */
+    position: relative;
+    top: 12vh; /* Start 20% down the screen */
     margin-top: 20px; /* Optional padding for spacing */
     height: calc(100vh - 20%); /* Height minus space taken by the search bar and the 20% top padding */
-    width: 60%;
+    width: 60vw;
     box-sizing: border-box;
-    margin-left: 60px;
+    margin-left: 3vw;
 }
 
 /* Styling for the "No search results found" message */

@@ -1,14 +1,14 @@
 .sidebar-container {
-  width: 320px;
+  width: 18vw;
   background-color: white;
   border-radius: 20px;  
   margin-left: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 10px;  /* Reduced padding */
-  padding-top: 100px;
+  padding-top: 10vh;
   position: fixed;
-  top: 14%; 
-  bottom: 1%;
+  top: 14vh; 
+  bottom: 1vh;
   left: 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -87,18 +87,20 @@
 }
 
 .sidebar-wrapper {
-  width: 16vw;
-  height: 18vh;
+  width: 35vh;
   position: fixed;
-  top: 3.5vh;
-  left: 30px;
+  top: 3.4vh;   /* Offset from the top by 2.4% of the viewport height */
+  left: 2vw;    /* Offset from the left by 2% of the viewport width */
   padding-top: 0px;
   z-index: 1;
+  
 }
 
 .sidebar-logo {
-  position: absolute; /* Make the logo absolutely positioned */
-  width: 110%; /* Adjust width as needed */
-  height: 110%;
+  position: relative;
+  max-width: 20vw;  /* Constrain the logo to the width of the sidebar */
+  max-height: 20vh; /* Constrain the logo to the height of the sidebar */
   z-index: 10;
+  width: auto;      /* Ensure aspect ratio is maintained */
+  height: auto;
 }

@@ -75,7 +75,7 @@ function MainContent({ handleSearchResults, documents, selectedLocations, yearRa
           /> 
         </div>
       )}
-      <main style={{ marginLeft: isDocumentViewer ? '0' : '340px', paddingTop: '0px', width: '100%' }}>
+      <main style={{ marginLeft: isDocumentViewer ? '0' : '40vh', paddingTop: '0px', width: '100%' }}>
         {!isDocumentViewer && (
           <SearchBar 
             onSearchResults={handleSearchResults} 
