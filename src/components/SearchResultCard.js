@@ -1,7 +1,7 @@
 // src/components/SearchResultCard.js
 import React, { useState, useRef } from 'react';
 import { Box, Typography, Divider, IconButton, Link } from '@mui/material';
-import MessageIcon from '@mui/icons-material/Message';
+// import MessageIcon from '@mui/icons-material/Message';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
 import './SearchResultCard.css';
@@ -196,14 +196,14 @@ const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, d
               </Typography>
             </Box>
 
-            {/* Message Icon Button */}
+            {/* Message Icon Button
             <IconButton
               ref={(el) => (buttonRefs.current[index] = el)} // Store button reference
               onClick={() => togglePopup(index)}
               className={`message-icon-button ${activePopupIndex === index ? 'active' : ''}`}
             >
               <MessageIcon />
-            </IconButton>
+            </IconButton> */}
 
             {/* Popup */}
             {activePopupIndex === index && (
