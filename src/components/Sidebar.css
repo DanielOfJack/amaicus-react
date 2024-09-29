@@ -1,5 +1,6 @@
 .sidebar-container {
   width: 18vw;
+  min-width: 100px;
   background-color: white;
   border-radius: 20px;  
   margin-left: 20px;
@@ -87,20 +88,25 @@
 }
 
 .sidebar-wrapper {
-  width: 35vh;
+  width: 20vw;
+  height: 20vh;
   position: fixed;
-  top: 3.4vh;   /* Offset from the top by 2.4% of the viewport height */
-  left: 2vw;    /* Offset from the left by 2% of the viewport width */
+  top: 3.4vh;
+  left: 2vw;
   padding-top: 0px;
   z-index: 1;
   
 }
 
 .sidebar-logo {
-  position: relative;
-  max-width: 20vw;  /* Constrain the logo to the width of the sidebar */
-  max-height: 20vh; /* Constrain the logo to the height of the sidebar */
+  position: absolute;  /* Absolute positioning inside the wrapper */
+  top: 50%;            /* Move the logo to the center vertically */
+  left: 40%;           /* Move the logo to the center horizontally */
+  transform: translate(-50%, -50%);  /* Center the logo using translate */
+  
+  max-width: 20vw;     /* Constrain the logo to the width of the sidebar */
+  max-height: 20vh;    /* Constrain the logo to the height of the sidebar */
   z-index: 10;
-  width: auto;      /* Ensure aspect ratio is maintained */
+  width: auto;         /* Ensure aspect ratio is maintained */
   height: auto;
 }
