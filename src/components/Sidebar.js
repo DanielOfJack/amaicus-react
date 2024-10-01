@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, Divider, Slider, Chip, List, ListItem, ListItemText, Checkbox, Autocomplete, TextField, Tooltip } from '@mui/material';
-import './Sidebar.css';
+import './Sidebar.css'; // Import CSS for sidebar styling
 
 const documentLabels = ["By-law", "Act", "Gazette", "Notice", "Judgement"];
 const africanCountries = ["South Africa", "Nigeria", "Kenya", "Ghana", "Egypt"];
@@ -34,31 +34,11 @@ const Sidebar = ({ onLocationChange, onYearRangeChange }) => {
             key={label}
             title="Documents have been restricted to only 'By laws' for the amAIcus Africa prototype. Full API access coming soon."
             placement="right"
-            arrow // Add arrow to Document tooltip
-            PopperProps={{
-              modifiers: [
-                {
-                  name: 'offset',
-                  options: {
-                    offset: [0, 10], // Adjusts tooltip positioning slightly
-                  },
-                },
-              ],
-            }}
-            componentsProps={{
-              tooltip: {
-                sx: {
-                  fontSize: '1rem', // Increase tooltip text size
-                  backgroundColor: '#gray', // Optional: customize tooltip background color
-                  color: 'white', // Optional: customize tooltip text color
-                },
-              },
-            }}
+            arrow
           >
             <Button
               key={label}
               variant={selectedDocuments.includes(label) ? "contained" : "outlined"}
-              color={selectedDocuments.includes(label) ? "primary" : "default"}
               disabled={label !== "By-law"}
               className={`custom-button ${selectedDocuments.includes(label) ? "active" : ""}`}
             >
@@ -79,7 +59,7 @@ const Sidebar = ({ onLocationChange, onYearRangeChange }) => {
           <TextField
             {...params}
             variant="outlined"
-            sx={{ backgroundColor: 'white', borderRadius: '20px' }}
+            sx={{ backgroundColor: 'white', borderRadius: '1rem' }}
           />
         )}
         className="sidebar-autocomplete"
@@ -154,7 +134,7 @@ const Sidebar = ({ onLocationChange, onYearRangeChange }) => {
 
       {/* Year Section */}
       <Typography variant="h6" className="sidebar-section-title">Year</Typography>
-      <Box sx={{ width: '90%' }}> {/* Adjust width as needed */}
+      <Box sx={{ width: '90%' }}>
         <Slider
           value={yearRange}
           onChange={handleYearRangeChange}

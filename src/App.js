@@ -20,37 +20,34 @@ const theme = createTheme({
 
 function App() {
   const [documents, setDocuments] = useState([]);  // State to hold the documents
-  const [selectedLocations, setSelectedLocations] = useState([]);  // State to hold selected locations
+  const [selectedLocations, setSelectedLocations] = useState([]);
   const [yearRange, setYearRange] = useState([1900, 2024]);  // State for date range filter
   const [loading, setLoading] = useState(false); // Loading state for spinner
 
   const handleSearchResults = (results) => {
-    console.log("Search results received from server:", results); // Debugging output
     setDocuments(results);
   };
 
   const handleLocationFilterChange = (locations) => {
-    console.log("Selected locations:", locations); // Debugging output
-    setSelectedLocations(locations); // Update selected locations
+    setSelectedLocations(locations);
   };
 
   const handleYearRangeChange = (range) => {
-    console.log("Year range selected:", range); // Debugging output
-    setYearRange(range); // Update year range
+    setYearRange(range);
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <MainContent 
-          handleSearchResults={handleSearchResults} 
-          documents={documents} 
-          selectedLocations={selectedLocations} 
-          yearRange={yearRange} // Pass the year range
-          onLocationChange={handleLocationFilterChange} 
-          onYearRangeChange={handleYearRangeChange} // Pass the year range change handler
-          loading={loading} 
-          setLoading={setLoading} 
+        <MainContent
+          handleSearchResults={handleSearchResults}
+          documents={documents}
+          selectedLocations={selectedLocations}
+          yearRange={yearRange}
+          onLocationChange={handleLocationFilterChange}
+          onYearRangeChange={handleYearRangeChange}
+          loading={loading}
+          setLoading={setLoading}
         />
       </Router>
     </ThemeProvider>
@@ -59,16 +56,21 @@ function App() {
 
 function MainContent({ handleSearchResults, documents, selectedLocations, yearRange, onLocationChange, onYearRangeChange, loading, setLoading }) {
   const location = useLocation();
-  const [sortBy, setSortBy] = useState("Similarity Score");  // Add sortBy state here
+  const [sortBy, setSortBy] = useState("Similarity Score");
 
   // Determine if we are on the document viewer page
   const isDocumentViewer = location.pathname.startsWith('/document/');
 
   return (
     <div style={{ display: 'flex' }}>
+      {/* Logo above the sidebar */}
+      {!isDocumentViewer && (
+        <div className="logo-wrapper">
+          <img src={logo} alt="Logo" className="app-logo" />
+        </div>
+      )}
       {!isDocumentViewer && (
         <div className="sidebar-wrapper">
-          <img src={logo} alt="Logo" className="sidebar-logo" /> 
           <Sidebar 
             onLocationChange={onLocationChange} 
             onYearRangeChange={onYearRangeChange}
@@ -81,8 +83,8 @@ function MainContent({ handleSearchResults, documents, selectedLocations, yearRa
             onSearchResults={handleSearchResults} 
             setLoading={setLoading} 
             loading={loading}
-            sortBy={sortBy}  // Pass the current sortBy value to the SearchBar
-            setSortBy={setSortBy}  // Pass the setSortBy function to update the sort value
+            sortBy={sortBy}
+            setSortBy={setSortBy}
           />
         )}
         <Routes>
@@ -94,9 +96,9 @@ function MainContent({ handleSearchResults, documents, selectedLocations, yearRa
                 selectedLocations={selectedLocations}
                 yearRange={yearRange}
                 loading={loading}
-                sortBy={sortBy}  // Pass sortBy to SearchResultsContainer for sorting
+                sortBy={sortBy}
               />
-            } 
+            }
           />
           <Route path="/document/:docId" element={<DocumentViewer />} />
         </Routes>

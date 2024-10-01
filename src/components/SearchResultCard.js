@@ -1,12 +1,8 @@
-// src/components/SearchResultCard.js
-import React, { useState, useRef } from 'react';
-import { Box, Typography, Divider, IconButton, Link } from '@mui/material';
-// import MessageIcon from '@mui/icons-material/Message';
-import CloseIcon from '@mui/icons-material/Close';
+import React, { useState } from 'react';
+import { Box, Typography, Divider, Link, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './SearchResultCard.css';
 
-// Function to map country codes to country names
 const getCountryName = (countryCode) => {
   const countryMap = {
     za: 'South Africa',
@@ -18,7 +14,6 @@ const getCountryName = (countryCode) => {
   return countryMap[countryCode.toLowerCase()] || countryCode;
 };
 
-// Mapping for location codes
 const getLocationName = (locationCode) => {
   const locationMap = {
     cpt: 'Cape Town',
@@ -32,15 +27,12 @@ const getLocationName = (locationCode) => {
   return locationMap[locationCode?.toLowerCase()] || locationCode || '';
 };
 
-// Adjust the subtype formatting (Capitalize first letter regardless of the value)
 const formatSubtype = (subtype) => {
   return subtype.charAt(0).toUpperCase() + subtype.slice(1);
 };
 
-// Function to format a component's title
 const formatComponentTitle = (component) => {
   const { tag, num, heading, subheading, crossheading } = component;
-
   const capitalizedTag = tag ? tag.charAt(0).toUpperCase() + tag.slice(1) : '';
   const formattedNum = num && num !== "N/A" ? (num.endsWith('.') ? num.slice(0, -1) : num) : '';
   
@@ -65,34 +57,72 @@ const formatComponentTitle = (component) => {
 };
 
 const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, date, expression_date, searchResults, docId }) => {
-  const [activePopupIndex, setActivePopupIndex] = useState(null);
-  const [popupPosition, setPopupPosition] = useState({ top: 0 });
-
-  const buttonRefs = useRef([]); // Store references to all message buttons
+  const [expandedHeadings, setExpandedHeadings] = useState({}); // Store the expanded state of headings
+  const [summaries, setSummaries] = useState({}); // Store summaries returned by API
+  const [loading, setLoading] = useState(false); // Track loading state for summaries
   const navigate = useNavigate();
 
-  const togglePopup = (index) => {
-    if (activePopupIndex === index) {
-      setActivePopupIndex(null);
-    } else {
-      const button = buttonRefs.current[index];
-      const buttonRect = button.getBoundingClientRect();
-      const popupTop = buttonRect.top + window.scrollY + buttonRect.height / 2;
-      setPopupPosition({ top: popupTop });
-      setActivePopupIndex(index);
+  const toggleHeadingExpansion = async (idx, eId, docId) => {
+    setExpandedHeadings((prevState) => ({
+      ...prevState,
+      [idx]: !prevState[idx], // Toggle the current index
+    }));
+  
+    // If summary not already fetched for this section, fetch it
+    if (!summaries[idx]) {
+      setLoading(true);
+  
+      // Initialize summary as empty while streaming
+      setSummaries((prevSummaries) => ({
+        ...prevSummaries,
+        [idx]: "", // Initialize empty string for streaming
+      }));
+  
+      try {
+        const response = await fetch('https://amaicus-production.up.railway.app/summarize', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eId, docId }),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to fetch summary");
+        }
+  
+        // Read and process the stream
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder(); // Decode text from the stream
+        let done = false;
+  
+        while (!done) {
+          const { value, done: readerDone } = await reader.read(); // Read each chunk from the stream
+          done = readerDone;
+          const chunk = decoder.decode(value, { stream: true }); // Decode each chunk
+  
+          // Debugging: Log each chunk received
+          console.log(`Received chunk: ${chunk}`);
+  
+          // Append the chunk to the existing summary
+          setSummaries((prevSummaries) => ({
+            ...prevSummaries,
+            [idx]: prevSummaries[idx] + chunk,
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching summary:", error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  // Extract location and country from the country code (e.g., za-wc011)
   const locationCode = countryName.split('-')[1];
   const countryCode = countryName.split('-')[0];
   const locationName = getLocationName(locationCode);
   const fullCountryName = getCountryName(countryCode);
 
-  // Find the highest score from the search results
   const highestScore = Math.max(...searchResults.map((result) => result.score));
 
-  // Initialize previousComponents to keep track of components from the previous hit
   let previousComponents = [];
 
   return (
@@ -120,7 +150,6 @@ const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, d
 
       {/* Search Results */}
       {searchResults.map((result, index) => {
-        // Build a list of components including parents and the hit component
         const components = [...result.parents, {
           tag: result.tag,
           eId: result.eId,
@@ -131,95 +160,101 @@ const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, d
           num: result.num
         }];
 
-        // Determine which components to render by comparing with previousComponents
         const componentsToRender = components.map((component, idx) => {
           const prevComponent = previousComponents[idx];
           if (
             prevComponent &&
             JSON.stringify(component) === JSON.stringify(prevComponent)
           ) {
-            // Component is the same as previous, so we omit rendering the title
             return null;
           } else {
-            // Component is different or new, so we render it
             return component;
           }
         });
 
-        // Update previousComponents for the next iteration
         previousComponents = components;
 
         return (
           <Box key={index} className="search-result">
             <Box className="search-result-content">
-              {/* Render each component with indentation */}
+              {/* Render each component with indentation and add '+' button for parent headings */}
               {componentsToRender.map((component, idx) => {
-                const indentLevel = idx; // Indent based on hierarchy level
+                const indentLevel = idx;
                 if (!component) {
-                  // Component is omitted, but maintain space for indentation
-                  return (
-                    <div key={idx} style={{ height: '0px' }}></div>
-                  );
+                  return <div key={idx} style={{ height: '0px' }}></div>;
                 } else {
                   const title = formatComponentTitle(component);
-                  return title ? (
-                    <Typography
-                      key={idx}
-                      variant="subtitle1"
-                      className="search-result-title"
-                      style={{ paddingLeft: `${indentLevel * 20}px` }}
-                    >
-                      {/* Make the heading a clickable link */}
-                      <Link
-                        component="button"
-                        variant="body2"
-                        onClick={() => {
-                          // Navigate to the DocumentViewer with docId and eId as parameters
-                          navigate(`/document/${docId}?eId=${component.eId}`);
+
+                  // Determine if this component is a parent heading by checking the next component's indent level
+                  const isParentHeading = componentsToRender[idx + 1] && componentsToRender[idx + 1].tag;
+
+                  return (
+                    <React.Fragment key={idx}>
+                      <Box style={{ display: 'flex', alignItems: 'center', paddingLeft: `${indentLevel * 20}px` }}>
+                        {/* Add the new '+' button only for parent headings */}
+                        {isParentHeading && (
+                          <Button 
+                            variant="contained" 
+                            size="small" 
+                            style={{ marginRight: '10px', minWidth: '30px', padding: '0' }}
+                            onClick={() => toggleHeadingExpansion(`${index}-${idx}`, component.eId, docId)} // Toggle on click
+                          >
+                            +
+                          </Button>
+                        )}
+                        <Typography
+                          variant="subtitle1"
+                          className="search-result-title"
+                        >
+                          {/* Make the heading a clickable link */}
+                          <Link
+                            component="button"
+                            variant="body2"
+                            onClick={() => {
+                              navigate(`/document/${docId}?eId=${component.eId}`);
+                            }}
+                            style={{ textDecoration: 'none', color: 'inherit' }}
+                          >
+                            {title}
+                          </Link>
+                        </Typography>
+                      </Box>
+
+                      {/* Render the sub-card if the heading is expanded */}
+                      {expandedHeadings[`${index}-${idx}`] && (
+                        <Box
+                        className={`sub-card ${loading && !summaries[`${index}-${idx}`] ? 'loading-animation' : ''}`}
+                        style={{
+                          padding: '10px',
+                          margin: '10px 0',
+                          border: '1px solid black',
+                          borderRadius: '10px',
+                          backgroundColor: '#f9f9f9',
+                          marginLeft: `${indentLevel * 20}px`, // Indent sub-card to match the heading
                         }}
-                        style={{ textDecoration: 'none', color: 'inherit' }}
                       >
-                        {title}
-                      </Link>
-                    </Typography>
-                  ) : null;
+                        <Typography variant="body2">
+                          {loading && !summaries[`${index}-${idx}`] ? "Loading..." : summaries[`${index}-${idx}`] || "No summary available"}
+                        </Typography>
+                      </Box>
+                      
+                      )}
+                    </React.Fragment>
+                  );
                 }
               })}
 
               {/* Render the content text indented based on the last non-null component */}
-              <Typography
-                variant="body2"
-                className="search-result-text"
-                style={{ paddingLeft: `${components.length * 20}px` }}
-              >
-                {result.content}
-              </Typography>
-            </Box>
-
-            {/* Message Icon Button
-            <IconButton
-              ref={(el) => (buttonRefs.current[index] = el)} // Store button reference
-              onClick={() => togglePopup(index)}
-              className={`message-icon-button ${activePopupIndex === index ? 'active' : ''}`}
-            >
-              <MessageIcon />
-            </IconButton> */}
-
-            {/* Popup */}
-            {activePopupIndex === index && (
-              <Box className="popup" style={{ top: `${popupPosition.top}px` }}>
-                <IconButton
-                  className="close-button"
-                  onClick={() => togglePopup(index)}
-                  style={{ position: 'absolute', top: '5px', right: '5px' }}
+              {result.content && (
+                <Typography
+                  variant="body2"
+                  className="search-result-text"
+                  style={{ paddingLeft: `${components.length * 20}px` }}
                 >
-                  <CloseIcon />
-                </IconButton>
-                <Typography variant="body1" className="popup-text">
-                  The document titled "{documentTitle}" pertains to legal regulations in {locationName}, {fullCountryName}. More details can be added here based on the document context.
+                  {result.content}
                 </Typography>
-              </Box>
-            )}
+              )}
+            </Box>
           </Box>
         );
       })}

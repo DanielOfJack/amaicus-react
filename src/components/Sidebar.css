@@ -1,112 +1,81 @@
+/* Sidebar styling */
 .sidebar-container {
-  width: 18vw;
-  min-width: 100px;
-  background-color: white;
-  border-radius: 20px;  
-  margin-left: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 10px;  /* Reduced padding */
-  padding-top: 10vh;
+  width: 20rem;
+  background-color: rgb(252, 252, 252);
+  border-radius: 0 2rem 2rem 0;
+  border: 1px solid #989898;
+  padding: 1.5rem;
+  padding-top: 4.5rem;
   position: fixed;
-  top: 14vh; 
-  bottom: 1vh;
+  top: 5rem;
+  bottom: 0;
   left: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid black;
-  background-color: rgb(250, 250, 250);
-  z-index: 0;
+  font-family: 'Raleway', sans-serif;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
 }
 
+/* Logo placement */
+.sidebar-logo {
+  width: 100%;
+  padding: 0.125rem 0; /* Reduce padding to shrink the gap */
+  margin: 0 auto; /* Center the logo */
+  text-align: center;
+}
+
+.sidebar-logo img {
+  max-width: 100%; /* Ensure the logo doesn't exceed its container */
+  height: auto;
+}
+
+/* Button group styling */
 .button-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; /* Reduced gap between buttons */
-  margin-bottom: 10px; /* Reduced bottom margin */
+  gap: 0.5rem;
 }
 
 .custom-button {
-  background-color: rgb(214, 214, 214) !important;
-  color: black !important;
-  border: 1px solid black;
-  padding: 5px 10px; /* Reduced padding inside buttons */
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
 }
 
 .custom-button.active {
-  background-color: black !important;
-  color: white !important;
+  background-color: black;
+  color: white;
 }
 
-.jurisdiction-chip {
-  background-color: black !important;
-  color: white !important;
-}
-
-.jurisdiction-chip .MuiChip-deleteIcon {
-  color: white !important; /* White cross */
-}
-
-/* Ensure that the tooltip displays for South Africa */
-.MuiChip-root:hover {
-  cursor: default;
-}
-
-.MuiChip-root.Mui-disabled {
-  background-color: black !important;
-  color: white !important;
-  opacity: 1 !important; /* Ensure opacity doesn't affect the chip */
-}
-
-.scrollable-list {
-  max-height: 150px;
-  overflow-y: auto;
-  padding: 10px;
-}
-
+/* Divider spacing */
 .sidebar-divider {
-  margin: 5px 0; /* Reduced margin for dividers */
+  margin: 1rem 0;
+  background-color: gray;
 }
 
-.slider-range {
-  margin-top: 5px;
-}
-
-.custom-slider {
-  left: 15px;
+/* Checkbox list */
+.scrollable-list {
+  max-height: 10rem;
+  overflow-y: auto;
 }
 
 .custom-checkbox {
-  color: black !important;
-  padding: 5px; /* Reduced checkbox padding */
+  padding: 0.5rem;
 }
 
-.custom-checkbox.Mui-checked {
-    color: black !important; /* Ensure checked color is black */
+/* Slider */
+.custom-slider {
+  margin-top: 1rem;
 }
 
-.sidebar-wrapper {
-  width: 20vw;
-  height: 20vh;
-  position: fixed;
-  top: 3.4vh;
-  left: 2vw;
-  padding-top: 0px;
-  z-index: 1;
-  
+.slider-range {
+  margin-top: 0.5rem;
+  font-size: 1rem;
 }
 
-.sidebar-logo {
-  position: absolute;  /* Absolute positioning inside the wrapper */
-  top: 50%;            /* Move the logo to the center vertically */
-  left: 40%;           /* Move the logo to the center horizontally */
-  transform: translate(-50%, -50%);  /* Center the logo using translate */
-  
-  max-width: 20vw;     /* Constrain the logo to the width of the sidebar */
-  max-height: 20vh;    /* Constrain the logo to the height of the sidebar */
-  z-index: 10;
-  width: auto;         /* Ensure aspect ratio is maintained */
-  height: auto;
+/* General typography */
+.sidebar-section-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
 }

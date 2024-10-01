@@ -77,7 +77,7 @@ const SearchResultsContainer = ({ documents, selectedLocations, yearRange, loadi
           />
         ))
       ) : (
-        <p className="no-results">No search results found</p>
+        <p className="no-results">Ask AmAIcus...</p>
       )}
     </div>
   );

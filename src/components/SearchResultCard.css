@@ -1,58 +1,61 @@
-/* SearchResultCard.css */
+/* Apply Raleway font to the entire card */
 .search-result-card {
     background-color: white;
-    border: 1px solid black;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 20px 0;
-    margin-left: 20px; /* Add left margin to create space from the sidebar */
+    border: 0.1rem solid black;
+    border-radius: 0.625rem; /* 10px to rem */
+    padding: 1.25rem; /* 20px to rem */
+    margin: 1.25rem 0; /* 20px to rem */
+    margin-left: 1.25rem; /* Create space from the sidebar */
     width: 100%; /* Adjust card width */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Drop shadow */
+    box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.1); /* 4px 10px to rem */
     box-sizing: border-box; /* Ensure padding and border are inside the width */
     position: relative; /* This is important for positioning the popup relative to the card */
+    font-family: 'Raleway', sans-serif; /* Apply Raleway font */
 }
 
 .document-title {
     font-weight: bold;
-    margin-bottom: 15px !important;
+    margin-bottom: 1rem !important; /* 15px to rem */
+    font-size: 1.5rem; /* Adjust font size */
 }
 
 .country-info-row {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
+    gap: 0.625rem; /* 10px to rem */
+    margin-bottom: 1rem; /* 15px to rem */
 }
 
 .flag-icon {
-    width: 40px;
-    height: 25px;
+    width: 2.5rem; /* 40px to rem */
+    height: 1.5625rem; /* 25px to rem */
     object-fit: cover;
-    border: 1px solid black;
+    border: 0.0625rem solid black; /* 1px to rem */
 }
 
 .country-name,
 .document-type,
 .document-date {
-    font-size: 14px;
+    font-size: 0.875rem; /* 14px to rem */
     color: black;
 }
 
 .divider {
-    margin: 15px 0;
+    margin: 1rem 0; /* 15px to rem */
+    background-color: gray;
 }
 
 .search-result {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 1rem; /* 15px to rem */
 }
 
 .search-score {
-    font-size: 24px !important; /* Force the font size to apply */
+    font-size: 1.5rem !important; /* 24px to rem */
     font-weight: bold;
-    margin-right: 20px !important;/* Added more margin to the right */
-    min-width: 60px; /* Increased the width to make scores stand out */
+    margin-right: 1.25rem !important; /* 20px to rem */
+    min-width: 3.75rem; /* 60px to rem */
     text-align: center;
     color: black;
 }
@@ -62,20 +65,21 @@
 }
 
 .search-result-title {
-    white-space: pre-line;  /* This ensures that \n is rendered as a new line */
+    white-space: pre-line; /* This ensures that \n is rendered as a new line */
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 0.3125rem; /* 5px to rem */
+    font-size: 1rem; /* Adjust font size */
 }
 
 .search-result-text {
     color: #555;
-    font-size: 14px;
+    font-size: 0.875rem; /* 14px to rem */
 }
 
-/* SearchResultCard.css */
+/* Divider styling */
 .divider {
-    margin: 15px 0; /* Current margin */
-    margin-bottom: 15px !important; /* Increase bottom margin to add space below */
+    margin: 1rem 0; /* Current margin */
+    margin-bottom: 1rem !important; /* Add more space below */
 }
 
 .message-icon-button {
@@ -86,27 +90,58 @@
     fill: black;
 }
 
+/* Popup styling */
 .popup {
     position: absolute;
-    left: calc(100% + 20px); /* Position the popup 20px to the right of the search result card */
+    left: calc(100% + 1.25rem); /* 20px to rem, position popup to the right of the search result card */
     width: 40%;
     background-color: white;
-    border: 1px solid black;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    padding: 20px;
+    border: 0.1rem solid black;
+    border-radius: 0.625rem; /* 10px to rem */
+    box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.2); /* 4px 10px to rem */
+    padding: 1.25rem; /* 20px to rem */
     transform: translateY(-70%);
     z-index: 1000;
+    font-family: 'Raleway', sans-serif; /* Apply Raleway font */
 }
 
 .popup-text {
-    font-size: 14px;
+    font-size: 0.875rem; /* 14px to rem */
     color: black;
 }
 
 .close-button {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 0.625rem; /* 10px to rem */
+    right: 0.625rem; /* 10px to rem */
     z-index: 10;
+}
+
+@keyframes trace-border {
+    0% {
+    border-color: transparent;
+      box-shadow: 0 0 5px 5px rgba(136, 243, 137, 0.5); /* Initial pink glow */
+    }
+    25% {
+    border-color: rgb(136, 243, 137);
+    border-top-color: rgb(136, 243, 137);
+    }
+    50% {
+    border-right-color: rgb(136, 243, 137);
+    }
+    75% {
+    border-bottom-color: rgb(136, 243, 137);
+    }
+    100% {
+    border-left-color: rgb(136, 243, 137);
+      box-shadow: 0 0 10px 10px rgb(136, 243, 137, 07); /* Pink glow intensifies */
+    }
+}
+
+.loading-animation {
+    animation: trace-border 2s infinite linear; /* Apply the animation */
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(136, 243, 137);
+    border-radius: 10px;
 }
