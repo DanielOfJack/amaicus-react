@@ -30,12 +30,30 @@ const Sidebar = ({ onLocationChange, onYearRangeChange }) => {
       <Typography variant="h6" className="sidebar-section-title">Document</Typography>
       <Box className="button-group">
         {documentLabels.map((label) => (
-          <Tooltip
-            key={label}
-            title="Documents have been restricted to only 'By laws' for the amAIcus Africa prototype. Full API access coming soon."
-            placement="right"
-            arrow
-          >
+          <Tooltip 
+          title="Jurisdiction has been limited to South Africa for the amAIcus Africa prototype. Full API access coming soon." 
+          placement="right" 
+          arrow
+          PopperProps={{
+            modifiers: [
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, 10],
+                },
+              },
+            ],
+          }}
+          componentsProps={{
+            tooltip: {
+              sx: {
+                fontSize: '1rem', // Increase tooltip text size
+                backgroundColor: '#gray', // Optional: customize tooltip background color
+                color: 'white', // Optional: customize tooltip text color
+              },
+            },
+          }}
+        >
             <Button
               key={label}
               variant={selectedDocuments.includes(label) ? "contained" : "outlined"}
@@ -118,18 +136,29 @@ const Sidebar = ({ onLocationChange, onYearRangeChange }) => {
       <Typography variant="h6" className="sidebar-section-title">Locality</Typography>
       <List className="scrollable-list">
         {cities.map((city) => (
-          <ListItem key={city} disablePadding>
+          <ListItem key={city} disablePadding sx={{ overflow: 'visible' }}>  {/* Ensure overflow is visible */}
             <Checkbox
               edge="start"
               checked={selectedLocalities.includes(city)}
               tabIndex={-1}
               onChange={() => toggleLocality(city)}
               className="custom-checkbox"
+              sx={{
+                '& .MuiSvgIcon-root': {
+                  color: 'black',
+                },
+                '&.Mui-checked .MuiSvgIcon-root': {
+                  color: 'black',
+                },
+                '&:hover': {
+                  backgroundColor: 'transparent', // Clean hover background
+                },
+              }}
             />
             <ListItemText primary={city} />
           </ListItem>
-        ))}
-      </List>
+          ))}
+        </List>
       <Divider className="sidebar-divider" />
 
       {/* Year Section */}

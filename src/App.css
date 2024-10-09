@@ -12,7 +12,7 @@
   position: fixed;
   top: 1rem; /* Adjust the position of the sidebar under the logo */
   left: 0;
-  width: 18rem;
+  width: 20rem;
 }
 
 /* Logo styling */
@@ -55,3 +55,96 @@
   }
 }
 
+/* Sidebar styling */
+.sidebar-container {
+  width: 20rem;
+  background-color: rgb(252, 252, 252);
+  border-radius: 0 2rem 2rem 0;
+  border: 1px solid #989898;
+  padding: 1.5rem;
+  padding-top: 4.5rem;
+  position: fixed;
+  top: 5rem;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: 'Raleway', sans-serif;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* Button group styling */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.custom-button {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.custom-button.active {
+  background-color: black;
+  color: white;
+}
+
+/* Divider spacing */
+.sidebar-divider {
+  margin: 1rem 0;
+  background-color: gray;
+}
+
+/* Checkbox list */
+.scrollable-list {
+  max-height: 10rem;
+  overflow-y: auto;
+}
+
+.custom-checkbox {
+  padding: 0.5rem;
+}
+
+/* Slider */
+.custom-slider {
+  margin-top: 1rem;
+}
+
+.slider-range {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+/* General typography */
+.sidebar-section-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  align-items: center;
+  height: 15vh; /* Initial height */
+  transition: all 0.5s ease-in-out; /* Smooth transition for all changes */
+}
+
+.search-container.centered {
+  height: 40vh; /* Initial height when centered */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  transition: all 0.5s ease-in-out; /* Smooth transition for all changes */
+}
+
+.amaicus-title {
+  font-size: 4rem;
+  color: rgb(131, 161, 131);
+  font-family: 'Raleway', sans-serif;
+  margin-bottom: 16rem; /* Space between title and search bar */
+}

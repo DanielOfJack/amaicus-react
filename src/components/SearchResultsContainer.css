@@ -1,13 +1,13 @@
-/* The container holding the search results */
+
 .search-results-container {
-    position: relative;
-    top: 12vh; /* Start 20% down the screen */
-    margin-top: 20px; /* Optional padding for spacing */
-    height: calc(80vh - 20%); /* Height minus space taken by the search bar and the 20% top padding */
-    width: 60vw;
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Align items at the top */
+    flex-direction: column; /* Ensure the items are stacked vertically */
+    margin: 0 auto;
+    width: 100%; /* Ensure the container takes full width */
     box-sizing: border-box;
-    margin-left: 3vw;
-}
+} 
 
 .no-results {
     margin-left: 25px;
@@ -16,3 +16,50 @@
     color: #515d50; /* Keep the green color */
     padding-top: 0px; /* Increase padding for breathing space */
 }
+
+/* General styles for the search result card */
+.search-result-card {
+    background-color: white;
+    border: 0.1rem solid black;
+    border-radius: 0.625rem;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+    width: 80%;
+    box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    position: relative;
+    font-family: 'Raleway', sans-serif;
+  }
+  
+  /* Skeleton loader animation */
+  .skeleton-loader {
+    background-color: #eee;
+    height: 1rem;
+    width: 100%;
+    margin: 0.5rem 0;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .skeleton-loader::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+    animation: loading 1.5s infinite;
+  }
+  
+  @keyframes loading {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+  

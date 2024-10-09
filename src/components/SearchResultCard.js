@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Divider, Link, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './SearchResultCard.css';
+import Tooltip from '@mui/material/Tooltip';
 
 const getCountryName = (countryCode) => {
   const countryMap = {
@@ -31,13 +32,25 @@ const formatSubtype = (subtype) => {
   return subtype.charAt(0).toUpperCase() + subtype.slice(1);
 };
 
+const getParagraphFromEId = (eId) => {
+  const match = eId.match(/_p_(\d+)$/); // Extract the number after '_p_' in the eId
+  if (match && match[1]) {
+    return `Paragraph ${match[1]}`; // Return 'Paragraph' followed by the number
+  }
+  return 'Paragraph'; // Fallback in case there's no match
+};
+
 const formatComponentTitle = (component) => {
-  const { tag, num, heading, subheading, crossheading } = component;
+  const { tag, num, heading, subheading, crossheading, eId } = component;
   const capitalizedTag = tag ? tag.charAt(0).toUpperCase() + tag.slice(1) : '';
   const formattedNum = num && num !== "N/A" ? (num.endsWith('.') ? num.slice(0, -1) : num) : '';
-  
+
   let titleParts = [];
-  if (capitalizedTag && formattedNum) {
+  
+  // Check if the tag is 'P' and use eId to form the title
+  if (capitalizedTag === 'P' && eId) {
+    titleParts.push(getParagraphFromEId(eId));
+  } else if (capitalizedTag && formattedNum) {
     titleParts.push(`${capitalizedTag} ${formattedNum}`);
   } else if (capitalizedTag) {
     titleParts.push(`${capitalizedTag}`);
@@ -46,9 +59,11 @@ const formatComponentTitle = (component) => {
   if (heading && heading !== "N/A") {
     titleParts.push(heading);
   }
+
   if (subheading && subheading !== "N/A") {
     titleParts.push(subheading);
   }
+
   if (crossheading && crossheading !== "N/A") {
     titleParts.push(crossheading);
   }
@@ -59,7 +74,7 @@ const formatComponentTitle = (component) => {
 const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, date, expression_date, searchResults, docId }) => {
   const [expandedHeadings, setExpandedHeadings] = useState({}); // Store the expanded state of headings
   const [summaries, setSummaries] = useState({}); // Store summaries returned by API
-  const [loading, setLoading] = useState(false); // Track loading state for summaries
+  const [setLoading] = useState(false); // Track loading state for summaries
   const navigate = useNavigate();
 
   const toggleHeadingExpansion = async (idx, eId, docId) => {
@@ -67,45 +82,41 @@ const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, d
       ...prevState,
       [idx]: !prevState[idx], // Toggle the current index
     }));
-  
-    // If summary not already fetched for this section, fetch it
+
+    // If summary not already fetched for this section, show skeleton loader
     if (!summaries[idx]) {
       setLoading(true);
-  
-      // Initialize summary as empty while streaming
+
+      // Initialize skeleton loader
       setSummaries((prevSummaries) => ({
         ...prevSummaries,
-        [idx]: "", // Initialize empty string for streaming
+        [idx]: "loading", // Use 'loading' as a placeholder for the skeleton loader
       }));
-  
+
       try {
         const response = await fetch('https://amaicus-production.up.railway.app/summarize', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ eId, docId }),
         });
-  
+
         if (!response.ok) {
           throw new Error("Failed to fetch summary");
         }
-  
-        // Read and process the stream
+
         const reader = response.body.getReader();
-        const decoder = new TextDecoder(); // Decode text from the stream
+        const decoder = new TextDecoder(); 
         let done = false;
-  
+
         while (!done) {
-          const { value, done: readerDone } = await reader.read(); // Read each chunk from the stream
+          const { value, done: readerDone } = await reader.read();
           done = readerDone;
-          const chunk = decoder.decode(value, { stream: true }); // Decode each chunk
-  
-          // Debugging: Log each chunk received
-          console.log(`Received chunk: ${chunk}`);
-  
-          // Append the chunk to the existing summary
+          const chunk = decoder.decode(value, { stream: true });
+
+          // Append chunk to summary
           setSummaries((prevSummaries) => ({
             ...prevSummaries,
-            [idx]: prevSummaries[idx] + chunk,
+            [idx]: prevSummaries[idx] === "loading" ? chunk : prevSummaries[idx] + chunk,
           }));
         }
       } catch (error) {
@@ -131,11 +142,36 @@ const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, d
       <Box className="document-info">
         <Typography variant="h5" className="document-title">
           {documentTitle}, {date}
-        </Typography>
-        {/* Display the highest score in the top right corner */}
-        <Typography className="highest-score" style={{ float: 'right' }}>
+          </Typography>
+      {/* Display the highest score in the top right corner with tooltip */}
+      <Tooltip 
+        title="Highest search similarity score from this document in the legal database" 
+        placement="right" 
+        arrow
+        PopperProps={{
+          modifiers: [
+            {
+              name: 'offset',
+              options: {
+                offset: [0, 10],
+              },
+            },
+          ],
+        }}
+        componentsProps={{
+          tooltip: {
+            sx: {
+              fontSize: '1rem', // Increase tooltip text size
+              backgroundColor: '#gray', // Optional: customize tooltip background color
+              color: 'white', // Optional: customize tooltip text color
+            },
+          },
+        }}
+      >
+        <Typography className="highest-score" style={{ float: 'right', cursor: 'pointer' }}>
           Highest Score: {highestScore.toFixed(2)}
         </Typography>
+      </Tooltip>
       </Box>
 
       {/* Country Info Row */}
@@ -220,24 +256,32 @@ const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, d
                         </Typography>
                       </Box>
 
-                      {/* Render the sub-card if the heading is expanded */}
+                      {/* Render the sub-card with skeleton loader or actual summary */}
                       {expandedHeadings[`${index}-${idx}`] && (
                         <Box
-                        className={`sub-card ${loading && !summaries[`${index}-${idx}`] ? 'loading-animation' : ''}`}
-                        style={{
-                          padding: '10px',
-                          margin: '10px 0',
-                          border: '1px solid black',
-                          borderRadius: '10px',
-                          backgroundColor: '#f9f9f9',
-                          marginLeft: `${indentLevel * 20}px`, // Indent sub-card to match the heading
-                        }}
-                      >
-                        <Typography variant="body2">
-                          {loading && !summaries[`${index}-${idx}`] ? "Loading..." : summaries[`${index}-${idx}`] || "No summary available"}
-                        </Typography>
-                      </Box>
-                      
+                          className="sub-card"
+                          style={{
+                            padding: '10px',
+                            margin: '10px 0',
+                            border: '1px solid black',
+                            borderRadius: '10px',
+                            backgroundColor: '#fcfcfc',
+                            marginLeft: `${indentLevel * 20}px`,
+                          }}
+                        >
+                          {summaries[`${index}-${idx}`] === "loading" ? (
+                            // Skeleton loader content (as many as needed)
+                            <>
+                              <div className="skeleton-loader"></div>
+                              <div className="skeleton-loader" style={{ width: '90%' }}></div>
+                              <div className="skeleton-loader" style={{ width: '75%' }}></div>
+                            </>
+                          ) : (
+                            <Typography variant="body2">
+                              {summaries[`${index}-${idx}`] || "No summary available"}
+                            </Typography>
+                          )}
+                        </Box>
                       )}
                     </React.Fragment>
                   );

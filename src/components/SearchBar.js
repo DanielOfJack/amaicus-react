@@ -3,7 +3,7 @@ import { Box, TextField, InputAdornment, Select, MenuItem, FormControl, InputLab
 import SearchIcon from '@mui/icons-material/Search';
 import './SearchBar.css';
 
-const SearchBar = ({ onSearchResults, setLoading, loading, sortBy, setSortBy }) => {
+const SearchBar = ({ onSearchResults, setLoading, loading, sortBy, setSortBy, setHasSearched }) => {
   const [searchQuery, setSearchQuery] = useState(""); // State for the search input
 
   const handleSortChange = (event) => {
@@ -11,6 +11,7 @@ const SearchBar = ({ onSearchResults, setLoading, loading, sortBy, setSortBy }) 
   };
 
   const handleSearch = async () => {
+    setHasSearched(true); // Move search bar and hide title immediately
     setLoading(true); // Set loading to true when the search starts
     try {
       const response = await fetch('https://amaicus-production.up.railway.app/search', {

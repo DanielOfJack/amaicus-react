@@ -1,9 +1,35 @@
 import React from 'react';
 import SearchResultCard from './SearchResultCard';
-import CircularProgress from '@mui/material/CircularProgress';
 import './SearchResultsContainer.css';
 
-// Mapping for location codes
+// Skeleton Loader for Search Results
+const SkeletonSearchResultCard = () => {
+  return (
+    <div className="search-result-card skeleton">
+      <div className="skeleton-loader" style={{ height: '2rem', marginBottom: '1rem' }}></div> {/* Title */}
+      <div className="skeleton-loader" style={{ width: '80%', height: '1rem', marginBottom: '0.5rem' }}></div> {/* Subtitle */}
+      <div className="skeleton-loader" style={{ width: '60%', height: '1rem', marginBottom: '0.5rem' }}></div> {/* Date */}
+      <div className="skeleton-loader" style={{ width: '50%', height: '1rem' }}></div> {/* Document Type */}
+      <div className="skeleton-loader" style={{ height: '2rem', marginBottom: '1rem' }}></div> {/* Title */}
+      <div className="skeleton-loader" style={{ width: '80%', height: '1rem', marginBottom: '0.5rem' }}></div> {/* Subtitle */}
+      <div className="skeleton-loader" style={{ width: '60%', height: '1rem', marginBottom: '0.5rem' }}></div> {/* Date */}
+      <div className="skeleton-loader" style={{ width: '50%', height: '1rem' }}></div> {/* Document Type */}
+      <div className="skeleton-loader" style={{ height: '2rem', marginBottom: '1rem' }}></div> {/* Title */}
+      <div className="skeleton-loader" style={{ width: '80%', height: '1rem', marginBottom: '0.5rem' }}></div> {/* Subtitle */}
+      <div className="skeleton-loader" style={{ width: '60%', height: '1rem', marginBottom: '0.5rem' }}></div> {/* Date */}
+      <div className="skeleton-loader" style={{ width: '50%', height: '1rem' }}></div> {/* Document Type */}
+      <div className="skeleton-loader" style={{ height: '2rem', marginBottom: '1rem' }}></div> {/* Title */}
+      <div className="skeleton-loader" style={{ width: '80%', height: '1rem', marginBottom: '0.5rem' }}></div> {/* Subtitle */}
+      <div className="skeleton-loader" style={{ width: '60%', height: '1rem', marginBottom: '0.5rem' }}></div> {/* Date */}
+      <div className="skeleton-loader" style={{ width: '50%', height: '1rem' }}></div> {/* Document Type */}
+      <div className="skeleton-loader" style={{ height: '2rem', marginBottom: '1rem' }}></div> {/* Title */}
+      <div className="skeleton-loader" style={{ width: '80%', height: '1rem', marginBottom: '0.5rem' }}></div> {/* Subtitle */}
+      <div className="skeleton-loader" style={{ width: '60%', height: '1rem', marginBottom: '0.5rem' }}></div> {/* Date */}
+      <div className="skeleton-loader" style={{ width: '50%', height: '1rem' }}></div> {/* Document Type */}
+    </div>
+  );
+};
+
 const getLocationName = (locationCode) => {
   const locationMap = {
     wc011: 'Matzikama',
@@ -52,33 +78,32 @@ const SearchResultsContainer = ({ documents, selectedLocations, yearRange, loadi
 
   console.log("Sorted documents:", sortedDocuments); // Debugging output
 
+  // Render skeleton cards if loading
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress style={{ color: 'green', width: '100px', height: '100px' }} />
+      <div className="search-results-container">
+        {[...Array(5)].map((_, index) => (
+          <SkeletonSearchResultCard key={index} />
+        ))}
       </div>
     );
   }
 
   return (
     <div className="search-results-container">
-      {sortedDocuments.length > 0 ? (
-        sortedDocuments.map((doc, index) => (
-          <SearchResultCard
-            key={index}
-            documentTitle={doc.alias}
-            countryName={doc.country}  // Pass country code (like 'za-wc011')
-            flagUrl={`https://flagcdn.com/w320/${doc.country.split('-')[0]}.png`}
-            documentType={doc.subtype}
-            date={doc.date}
-            expression_date={doc.expression_date}
-            searchResults={doc.search_hits}
-            docId={doc.doc_id} // Pass docId to SearchResultCard
-          />
-        ))
-      ) : (
-        <p className="no-results">Ask AmAIcus...</p>
-      )}
+      {sortedDocuments.map((doc, index) => (
+        <SearchResultCard
+          key={index}
+          documentTitle={doc.alias}
+          countryName={doc.country}  // Pass country code (like 'za-wc011')
+          flagUrl={`https://flagcdn.com/w320/${doc.country.split('-')[0]}.png`}
+          documentType={doc.subtype}
+          date={doc.date}
+          expression_date={doc.expression_date}
+          searchResults={doc.search_hits}
+          docId={doc.doc_id} // Pass docId to SearchResultCard
+        />
+      ))}
     </div>
   );
 };

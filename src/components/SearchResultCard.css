@@ -5,8 +5,7 @@
     border-radius: 0.625rem; /* 10px to rem */
     padding: 1.25rem; /* 20px to rem */
     margin: 1.25rem 0; /* 20px to rem */
-    margin-left: 1.25rem; /* Create space from the sidebar */
-    width: 100%; /* Adjust card width */
+    width: 80%; /* Adjust card width */
     box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.1); /* 4px 10px to rem */
     box-sizing: border-box; /* Ensure padding and border are inside the width */
     position: relative; /* This is important for positioning the popup relative to the card */
@@ -90,26 +89,6 @@
     fill: black;
 }
 
-/* Popup styling */
-.popup {
-    position: absolute;
-    left: calc(100% + 1.25rem); /* 20px to rem, position popup to the right of the search result card */
-    width: 40%;
-    background-color: white;
-    border: 0.1rem solid black;
-    border-radius: 0.625rem; /* 10px to rem */
-    box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.2); /* 4px 10px to rem */
-    padding: 1.25rem; /* 20px to rem */
-    transform: translateY(-70%);
-    z-index: 1000;
-    font-family: 'Raleway', sans-serif; /* Apply Raleway font */
-}
-
-.popup-text {
-    font-size: 0.875rem; /* 14px to rem */
-    color: black;
-}
-
 .close-button {
     position: absolute;
     top: 0.625rem; /* 10px to rem */
@@ -117,31 +96,35 @@
     z-index: 10;
 }
 
-@keyframes trace-border {
-    0% {
-    border-color: transparent;
-      box-shadow: 0 0 5px 5px rgba(136, 243, 137, 0.5); /* Initial pink glow */
-    }
-    25% {
-    border-color: rgb(136, 243, 137);
-    border-top-color: rgb(136, 243, 137);
-    }
-    50% {
-    border-right-color: rgb(136, 243, 137);
-    }
-    75% {
-    border-bottom-color: rgb(136, 243, 137);
-    }
-    100% {
-    border-left-color: rgb(136, 243, 137);
-      box-shadow: 0 0 10px 10px rgb(136, 243, 137, 07); /* Pink glow intensifies */
-    }
+
+/* Skeleton loader animation */
+.skeleton-loader {
+    background-color: #eee;
+    height: 1rem; /* Adjust the height as per your text size */
+    width: 100%;
+    margin: 0.5rem 0;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
 }
 
-.loading-animation {
-    animation: trace-border 2s infinite linear; /* Apply the animation */
-    border-width: 2px;
-    border-style: solid;
-    border-color: rgb(136, 243, 137);
-    border-radius: 10px;
+.skeleton-loader::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0));
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
 }
