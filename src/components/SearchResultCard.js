@@ -74,7 +74,7 @@ const formatComponentTitle = (component) => {
 const SearchResultCard = ({ documentTitle, countryName, flagUrl, documentType, date, expression_date, searchResults, docId }) => {
   const [expandedHeadings, setExpandedHeadings] = useState({}); // Store the expanded state of headings
   const [summaries, setSummaries] = useState({}); // Store summaries returned by API
-  const [setLoading] = useState(false); // Track loading state for summaries
+  const [, setLoading] = useState(false); // Ignore the loading state, just use setLoading
   const navigate = useNavigate();
 
   const toggleHeadingExpansion = async (idx, eId, docId) => {
